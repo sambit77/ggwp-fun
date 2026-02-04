@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Valentine?</title>
+
+<style>
+  * {
+    box-sizing: border-box;
+    font-family: "Segoe UI", sans-serif;
+  }
+
+  body {
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #ff758c, #ff7eb3);
+  }
+
+  .container {
+    background: white;
+    padding: 40px 30px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    position: relative;
+    width: 90%;
+    max-width: 380px;
+    z-index: 2;
+  }
+
+  h1 {
+    color: #ff4d6d;
+    margin-bottom: 30px;
+  }
+
+  .buttons {
+    position: relative;
+    height: 120px;
+  }
+
+  button {
+    padding: 14px 32px;
+    font-size: 18px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    position: absolute;
+    touch-action: manipulation;
+  }
+
+  #yesBtn {
+    background: #ff4d6d;
+    color: white;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  #yesBtn:active {
+    transform: translateX(-50%) scale(0.95);
+  }
+
+  #noBtn {
+    background: #ddd;
+    color: #333;
+  }
+
+  /* Floating hearts */
+  .heart {
+    position: absolute;
+    bottom: -20px;
+    font-size: 20px;
+    animation: floatUp 4s linear infinite;
+    opacity: 0.8;
+    z-index: 1;
+  }
+
+  @keyframes floatUp {
+    0% {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(-110vh) scale(1.5);
+      opacity: 0;
+    }
+  }
+
+  /* Hidden YouTube player */
+  #ytPlayer {
+    display: none;
+  }
+</style>
+</head>
+
+<body>
+
+<div class="container" id="container">
+  <h1>Will you be my Valentine? 💖</h1>
+  <div class="buttons">
+    <button id="yesBtn">Yes</button>
+    <button id="noBtn">No</button>
+  </div>
+</div>
+
+<!-- YouTube iframe (hidden) -->
+<iframe
+  id="ytPlayer"
+  width="0"
+  height="0"
+  src=""
+  frameborder="0"
+  allow="autoplay; encrypted-media"
+  allowfullscreen>
+</iframe>
+
+<script>
+  const noBtn = document.getElementById("noBtn");
+  const container = document.getElementById("container");
+  const ytPlayer = document.getElementById("ytPlayer");
+
+  function moveNoButton() {
+    const rect = container.getBoundingClientRect();
+    const btnRect = noBtn.getBoundingClientRect();
+
+    const maxX = rect.width - btnRect.width;
+    const maxY = rect.height - btnRect.height;
+
+    noBtn.style.left = Math.random() * maxX + "px";
+    noBtn.style.top = Math.random() * maxY + "px";
+  }
+
+  // Desktop behavior
+  noBtn.addEventListener("mouseenter", moveNoButton);
+  noBtn.addEventListener("mousemove", moveNoButton);
+
+  // Mobile behavior
+  noBtn.addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    moveNoButton();
+  });
+
+  document.getElementById("yesBtn").addEventListener("click", () => {
+    // Load & autoplay YouTube song at 57 seconds
+    ytPlayer.src =
+      "https://www.youtube.com/embed/SV9Mh96Le1M" +
+      "?start=57&autoplay=1&loop=1&playlist=SV9Mh96Le1M";
+
+    document.body.innerHTML += `
+      <div style="
+        position:fixed;
+        inset:0;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        background:linear-gradient(135deg,#ff758c,#ff7eb3);
+        color:white;
+        font-size:36px;
+        text-align:center;
+        padding:20px;
+        z-index:3;">
+        YAYYYY 💘😍<br>
+        Mai sirf teri mehbooba 💖
+      </div>
+    `;
+  });
+
+  // Floating hearts
+  function createHeart() {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerHTML = ["💖","💘","💕","❤️"][Math.floor(Math.random()*4)];
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.animationDuration = 3 + Math.random() * 2 + "s";
+    heart.style.fontSize = 16 + Math.random() * 20 + "px";
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 5000);
+  }
+
+  setInterval(createHeart, 300);
+  moveNoButton();
+</script>
+
+</body>
+</html>
