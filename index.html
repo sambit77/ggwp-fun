@@ -53,20 +53,24 @@
     touch-action: manipulation;
   }
 
+  /* YES button (left initially) */
   #yesBtn {
     background: #ff4d6d;
     color: white;
-    left: 50%;
-    transform: translateX(-50%);
+    left: 45%;
+    transform: translateX(-100%);
   }
 
   #yesBtn:active {
-    transform: translateX(-50%) scale(0.95);
+    transform: translateX(-100%) scale(0.95);
   }
 
+  /* NO button (right initially) */
   #noBtn {
     background: #ddd;
     color: #333;
+    left: 55%;
+    transform: translateX(0);
   }
 
   /* Floating hearts */
@@ -107,7 +111,6 @@
   </div>
 </div>
 
-<!-- YouTube iframe (hidden) -->
 <iframe
   id="ytPlayer"
   width="0"
@@ -123,7 +126,11 @@
   const container = document.getElementById("container");
   const ytPlayer = document.getElementById("ytPlayer");
 
+  let escapeEnabled = false;
+
   function moveNoButton() {
+    if (!escapeEnabled) return;
+
     const rect = container.getBoundingClientRect();
     const btnRect = noBtn.getBoundingClientRect();
 
@@ -132,23 +139,27 @@
 
     noBtn.style.left = Math.random() * maxX + "px";
     noBtn.style.top = Math.random() * maxY + "px";
+    noBtn.style.transform = "none";
   }
 
-  // Desktop behavior
+  // Enable escaping after initial view
+  setTimeout(() => {
+    escapeEnabled = true;
+  }, 700);
+
+  // Desktop
   noBtn.addEventListener("mouseenter", moveNoButton);
   noBtn.addEventListener("mousemove", moveNoButton);
 
-  // Mobile behavior
+  // Mobile
   noBtn.addEventListener("touchstart", (e) => {
     e.preventDefault();
     moveNoButton();
   });
 
   document.getElementById("yesBtn").addEventListener("click", () => {
-    // Load & autoplay YouTube song at 57 seconds
     ytPlayer.src =
-      "https://www.youtube.com/embed/SV9Mh96Le1M" +
-      "?start=57&autoplay=1&loop=1&playlist=SV9Mh96Le1M";
+      "https://www.youtube.com/embed/SV9Mh96Le1M?start=57&autoplay=1";
 
     document.body.innerHTML += `
       <div style="
@@ -182,7 +193,6 @@
   }
 
   setInterval(createHeart, 300);
-  moveNoButton();
 </script>
 
 </body>
