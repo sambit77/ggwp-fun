@@ -80,19 +80,38 @@
   }
 
   @keyframes floatUp {
-    0% {
+    from {
       transform: translateY(0) scale(1);
       opacity: 1;
     }
-    100% {
+    to {
       transform: translateY(-110vh) scale(1.5);
       opacity: 0;
     }
   }
 
-  /* Hidden YouTube player */
-  #ytPlayer {
-    display: none;
+  /* Celebration overlay */
+  .celebration {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg, #ff758c, #ff7eb3);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+    padding: 20px;
+    z-index: 5;
+  }
+
+  .celebration h2 {
+    font-size: 34px;
+    margin-bottom: 20px;
+  }
+
+  iframe {
+    border-radius: 14px;
   }
 </style>
 </head>
@@ -107,21 +126,9 @@
   </div>
 </div>
 
-<!-- YouTube iframe (hidden) -->
-<iframe
-  id="ytPlayer"
-  width="0"
-  height="0"
-  src=""
-  frameborder="0"
-  allow="autoplay; encrypted-media"
-  allowfullscreen>
-</iframe>
-
 <script>
   const noBtn = document.getElementById("noBtn");
   const container = document.getElementById("container");
-  const ytPlayer = document.getElementById("ytPlayer");
 
   function moveNoButton() {
     const rect = container.getBoundingClientRect();
@@ -134,46 +141,37 @@
     noBtn.style.top = Math.random() * maxY + "px";
   }
 
-  // Desktop behavior
+  // Desktop
   noBtn.addEventListener("mouseenter", moveNoButton);
   noBtn.addEventListener("mousemove", moveNoButton);
 
-  // Mobile behavior
+  // Mobile
   noBtn.addEventListener("touchstart", (e) => {
     e.preventDefault();
     moveNoButton();
   });
 
   document.getElementById("yesBtn").addEventListener("click", () => {
-    // Load & autoplay YouTube song at 57 seconds
-    ytPlayer.src =
-      "https://www.youtube.com/embed/SV9Mh96Le1M" +
-      "?start=57&autoplay=1&loop=1&playlist=SV9Mh96Le1M";
-
     document.body.innerHTML += `
-      <div style="
-        position:fixed;
-        inset:0;
-        display:flex;
-        justify-content:center;
-        align-items:center;
-        background:linear-gradient(135deg,#ff758c,#ff7eb3);
-        color:white;
-        font-size:36px;
-        text-align:center;
-        padding:20px;
-        z-index:3;">
-        YAYYYY 💘😍<br>
-        Mai sirf teri mehbooba 💖
+      <div class="celebration">
+        <h2>YAYYYY 💘😍<br>Mai sirf teri mehbooba 💖</h2>
+        <iframe
+          width="320"
+          height="180"
+          src="https://www.youtube.com/embed/SV9Mh96Le1M?start=57&autoplay=1&playsinline=1"
+          frameborder="0"
+          allow="autoplay; encrypted-media; picture-in-picture"
+          allowfullscreen>
+        </iframe>
       </div>
     `;
   });
 
-  // Floating hearts
+  // Floating hearts generator
   function createHeart() {
     const heart = document.createElement("div");
     heart.className = "heart";
-    heart.innerHTML = ["💖","💘","💕","❤️"][Math.floor(Math.random()*4)];
+    heart.innerHTML = ["💖","💘","💕","❤️"][Math.floor(Math.random() * 4)];
     heart.style.left = Math.random() * 100 + "vw";
     heart.style.animationDuration = 3 + Math.random() * 2 + "s";
     heart.style.fontSize = 16 + Math.random() * 20 + "px";
